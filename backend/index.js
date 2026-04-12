@@ -1,18 +1,15 @@
 const express = require("express");
 const app = express();
 const cors = require("cors");
+
 const mongoose = require("mongoose");
+const port = process.env.PORT || 5000;
 const path = require("path");
 require("dotenv").config({ path: path.join(__dirname, ".env") });
 
-<<<<<<< Updated upstream
-=======
-
->>>>>>> Stashed changes
 const defaultFrontendOrigins = [
   "http://localhost:5173",
   "http://127.0.0.1:5173",
-  "https://books-umber-nu.vercel.app",
   "https://book-three-sage.vercel.app",
   "https://book-app-frontend-tau.vercel.app",
 ];
@@ -37,27 +34,6 @@ app.use(
     credentials: true,
   }),
 );
-
-// middleware
-app.use(express.json());
-<<<<<<< Updated upstream
-app.use(
-  cors({
-    origin: [
-      "http://localhost:5173",
-      "https://book-app-frontend-tau.vercel.app",
-    ],
-    credentials: true,
-  }),
-);
-
-// middleware
-app.use(express.json());
-app.use(cors()); // ✅ allows ALL origins
-=======
-app.use(cors()); // ✅ allows ALL origins
->>>>>>> b8740c3deeefbf94397a4f85de307a0a5b202cb8
->>>>>>> Stashed changes
 
 // routes
 const bookRoutes = require("./src/books/book.route");
@@ -113,9 +89,8 @@ async function start() {
     process.exit(1);
   }
 
-  const port = process.env.PORT || 5000;
-  app.listen(port, "0.0.0.0", () => {
-    console.log(`Server listening on port ${port}`);
+  app.listen(port, () => {
+    console.log(`Example app listening on port ${port}`);
   });
 }
 
