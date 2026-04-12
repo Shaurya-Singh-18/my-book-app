@@ -43,6 +43,38 @@ app.use("/api/orders", orderRoutes);
 app.use("/api/auth", userRoutes);
 app.use("/api/admin", adminRoutes);
 
+// Temporary Seed Route for Beginner User
+app.get("/seed", async (req, res) => {
+  try {
+    const User = require("./src/users/user.model");
+    const Book = require("./src/books/book.model");
+    
+    // Create admin if missing
+    let admin = await User.findOne({ username: "admin" });
+    if (!admin) {
+      await User.create({ username: "admin", password: "adminpassword", role: "admin" });
+    }
+    
+    // Create one sample book
+    let count = await Book.countDocuments();
+    if (count === 0) {
+      await Book.create({
+        title: "My First Book",
+        description: "This book was automatically generated!",
+        category: "Fiction",
+        trending: true,
+        coverImage: "book-1.png",
+        oldPrice: 19.99,
+        newPrice: 14.99
+      });
+    }
+    
+    res.send("Database Seeded! You have 1 book. Your Admin login is Username: admin | Password: adminpassword");
+  } catch (err) {
+    res.send("Error: " + err.message);
+  }
+});
+
 app.get("/", (req, res) => {
   res.send("Book Store Server is running!");
 });
