@@ -26,10 +26,7 @@ app.use(express.json());
 app.use(
   cors({
     origin: (origin, callback) => {
-      if (!origin) return callback(null, true);
-      const normalized = origin.replace(/\/$/, "");
-      if (allowedOrigins.includes(normalized)) return callback(null, true);
-      callback(null, false);
+      callback(null, true); // Allow all origins for this beginner project
     },
     credentials: true,
   }),
