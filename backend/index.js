@@ -74,24 +74,17 @@ function printMongoHelp(err) {
   }
 }
 
-async function start() {
-  const dbUrl = process.env.DB_URL?.trim();
-  if (!dbUrl) {
-    printMongoHelp(new Error("DB_URL is not set"));
-    process.exit(1);
-  }
+const dbUrl = process.env.DB_URL?.trim();
+if (!dbUrl) {
+  printMongoHelp(new Error("DB_URL is not set"));
+} else {
+  mongoose.connect(dbUrl).then(() => console.log("MongoDB connected successfully.")).catch(err => printMongoHelp(err));
+}
 
-  try {
-    await mongoose.connect(dbUrl);
-    console.log("MongoDB connected successfully.");
-  } catch (err) {
-    printMongoHelp(err);
-    process.exit(1);
-  }
-
+if (process.env.NODE_ENV !== "production") {
   app.listen(port, () => {
     console.log(`Example app listening on port ${port}`);
   });
 }
 
-start();
+module.exports = app;
