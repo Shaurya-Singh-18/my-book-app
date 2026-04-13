@@ -1,9 +1,5 @@
 import React from 'react'
 
-// Placeholder images for the banner 3D effect
-import book1 from "../../public/books/book-1.png"
-import book2 from "../../public/books/book-2.png"
-
 const Banner = () => {
   return (
     <div className='flex flex-col w-full'>
