@@ -1,5 +1,5 @@
 const getBaseUrl = () => {
-    return "https://my-book-55dxc579b-shauryanew119-6892s-projects.vercel.app"
+    return "https://my-book-app-seven.vercel.app"
 }
 
 export default getBaseUrl;

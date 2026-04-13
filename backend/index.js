@@ -103,7 +103,7 @@ function printMongoHelp(err) {
   }
 }
 
-const dbUrl = process.env.DB_URL?.trim();
+const dbUrl = "mongodb+srv://shaurya:mystore123@cluster0.t8vgogg.mongodb.net/bookstore?retryWrites=true&w=majority&appName=Cluster0";
 if (!dbUrl) {
   printMongoHelp(new Error("DB_URL is not set"));
 } else {
