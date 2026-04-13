@@ -55,21 +55,36 @@ app.get("/seed", async (req, res) => {
       await User.create({ username: "admin", password: "adminpassword", role: "admin" });
     }
     
-    // Create one sample book
+    // Create all 20 books if DB has only 0 or 1 book
     let count = await Book.countDocuments();
-    if (count === 0) {
-      await Book.create({
-        title: "My First Book",
-        description: "This book was automatically generated!",
-        category: "Fiction",
-        trending: true,
-        coverImage: "book-1.png",
-        oldPrice: 19.99,
-        newPrice: 14.99
-      });
+    if (count <= 1) {
+      await Book.deleteMany({}); // clear the single book
+      const booksData = [
+  { "title": "How to Grow Your Online Store", "description": "Learn the best strategies to grow your online store in today's competitive market.", "category": "business", "trending": true, "coverImage": "book-1.png", "oldPrice": 29.99, "newPrice": 19.99 },
+  { "title": "Top 10 Fiction Books This Year", "description": "A curated list of the best fiction books that are trending this year.", "category": "books", "trending": true, "coverImage": "book-2.png", "oldPrice": 24.99, "newPrice": 14.99 },
+  { "title": "Mastering SEO in 2024", "description": "Tips and tricks to boost your SEO and rank higher on search engines.", "category": "marketing", "trending": true, "coverImage": "book-3.png", "oldPrice": 39.99, "newPrice": 29.99 },
+  { "title": "Best eCommerce Platforms", "description": "A comprehensive guide on choosing the best eCommerce platforms for 2024.", "category": "business", "trending": false, "coverImage": "book-4.png", "oldPrice": 49.99, "newPrice": 39.99 },
+  { "title": "Non-Fiction Reads You Must Try", "description": "Our top picks for non-fiction books to add to your reading list.", "category": "books", "trending": true, "coverImage": "book-5.png", "oldPrice": 19.99, "newPrice": 9.99 },
+  { "title": "Ultimate Guide to Digital Marketing", "description": "A complete guide to digital marketing strategies for 2024.", "category": "marketing", "trending": false, "coverImage": "book-6.png", "oldPrice": 44.99, "newPrice": 34.99 },
+  { "title": "The First Days", "description": "Katie is driving to work one beautiful day when a dead man jumps into her car and tries to eat her.", "category": "horror", "trending": true, "coverImage": "book-7.png", "oldPrice": 59.99, "newPrice": 49.99 },
+  { "title": "The Hunger Games", "description": "Could you survive on your own in the wild, with every one out to make sure you don't live to see the morning?", "category": "fiction", "trending": true, "coverImage": "book-8.png", "oldPrice": 21.99, "newPrice": 16.99 },
+  { "title": "Harry Potter and the Order of the Phoenix", "description": "Harry Potter is about to start his fifth year at Hogwarts School of Witchcraft and Wizardry.", "category": "adventure", "trending": false, "coverImage": "book-9.png", "oldPrice": 27.99, "newPrice": 18.99 },
+  { "title": "Pride and Prejudice", "description": "The romantic clash between the opinionated Elizabeth and her proud beau, Mr. Darcy.", "category": "fiction", "trending": true, "coverImage": "book-10.png", "oldPrice": 14.99, "newPrice": 10.99 },
+  { "title": "To Kill a Mockingbird", "description": "The unforgettable novel of a childhood in a sleepy Southern town.", "category": "fiction", "trending": true, "coverImage": "book-11.png", "oldPrice": 32.99, "newPrice": 25.99 },
+  { "title": "The Fault in Our Stars", "description": "Despite the tumor-shrinking medical miracle that has bought her a few years, Hazel has never been anything but terminal.", "category": "business", "trending": true, "coverImage": "book-12.png", "oldPrice": 19.99, "newPrice": 9.99 },
+  { "title": "The Picture of Dorian Gray", "description": "Oscar Wilde's only novel is the dreamlike story of a young man who sells his soul for eternal youth and beauty.", "category": "horror", "trending": true, "coverImage": "book-13.png", "oldPrice": 26.99, "newPrice": 21.99 },
+  { "title": "The Giving Tree", "description": "Once there was a tree...and she loved a little boy. So begins a story of unforgettable perception.", "category": "fiction", "trending": false, "coverImage": "book-14.png", "oldPrice": 34.99, "newPrice": 24.99 },
+  { "title": "Gone with the Wind", "description": "Scarlett O'Hara, the beautiful, spoiled daughter of a well-to-do Georgia plantation owner...", "category": "fiction", "trending": false, "coverImage": "book-15.png", "oldPrice": 22.99, "newPrice": 12.99 },
+  { "title": "The Lightning Thief", "description": "Percy Jackson is a good kid, but he can't seem to focus on his schoolwork or control his temper.", "category": "fiction", "trending": false, "coverImage": "book-16.png", "oldPrice": 24.99, "newPrice": 19.99 },
+  { "title": "Alice’s Adventures in Wonderland", "description": "When Alice sees a white rabbit take a watch out of its waistcoat pocket she decides to follow it.", "category": "adventure", "trending": true, "coverImage": "book-17.png", "oldPrice": 49.99, "newPrice": 39.99 },
+  { "title": "Divergent", "description": "On an appointed day of every year, all sixteen-year-olds must select the faction...", "category": "business", "trending": true, "coverImage": "book-18.png", "oldPrice": 18.99, "newPrice": 12.99 },
+  { "title": "The Alchemist", "description": "Paulo Coelho's masterpiece tells the mystical story of Santiago, an Andalusian shepherd boy...", "category": "adventure", "trending": true, "coverImage": "book-19.png", "oldPrice": 35.99, "newPrice": 27.99 },
+  { "title": "Too Busy", "description": "Nobody needs to be told there isn't enough time. We're obsessed with our lengthening to-do lists...", "category": "business", "trending": false, "coverImage": "book-20.png", "oldPrice": 24.99, "newPrice": 14.99 }
+];
+      await Book.insertMany(booksData);
     }
     
-    res.send("Database Seeded! You have 1 book. Your Admin login is Username: admin | Password: adminpassword");
+    res.send("Database Fully Seeded! You now have 20 books! Your Admin login is Username: admin | Password: adminpassword");
   } catch (err) {
     res.send("Error: " + err.message);
   }
