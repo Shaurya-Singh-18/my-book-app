@@ -1,58 +1,86 @@
 import React from "react";
 import { FiShoppingCart } from "react-icons/fi";
+import { HiOutlineHeart, HiHeart } from "react-icons/hi2";
 import { getImgUrl } from "../../utils/getImgUrl";
 
 import { Link } from "react-router-dom";
 
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { addToCart } from "../../redux/features/cart/cartSlice";
+import { toggleWishlist } from "../../redux/features/wishlist/wishlistSlice";
 
 const BookCard = ({ book }) => {
   const dispatch = useDispatch();
   const bookId = book?._id ?? book?.id;
+  const wishlistItems = useSelector(state => state.wishlist?.wishlistItems || []);
+  const isWishlisted = wishlistItems.some(item => item._id === bookId);
 
   const handleAddToCart = (product) => {
     dispatch(addToCart(product));
   };
+  
+  const handleToggleWishlist = (e) => {
+    e.preventDefault(); // prevent triggering the Link
+    dispatch(toggleWishlist(book));
+  };
+
+  const discount = Math.round(((book.oldPrice - book.newPrice) / book.oldPrice) * 100);
+
   return (
-    <div className=" rounded-lg transition-shadow duration-300">
-      <div className="flex flex-col sm:flex-row sm:items-center sm:h-72  sm:justify-center gap-4">
-        <div className="sm:h-72 sm:flex-shrink-0 border rounded-md">
-          <Link to={bookId ? `/books/${bookId}` : "#"}>
-            <h3 className="..."> {book.title} </h3>
-            <img
-              src={`${getImgUrl(book?.coverImage)}`}
-              alt=""
-              className="w-full bg-cover p-2 rounded-md cursor-pointer hover:scale-105 transition-all duration-200"
-            />
-          </Link>
+    <div className="bg-white border border-gray-100 rounded-md shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col h-full overflow-hidden relative group">
+      
+      {/* Wishlist Button Overlay */}
+      <button 
+        onClick={handleToggleWishlist}
+        className="absolute top-3 right-3 z-10 w-8 h-8 flex items-center justify-center bg-white rounded-full shadow hover:bg-gray-50 transition"
+      >
+        {isWishlisted ? <HiHeart className="text-red-500 size-5" /> : <HiOutlineHeart className="text-gray-400 size-5" />}
+      </button>
+
+      <Link to={bookId ? `/books/${bookId}` : "#"} className="flex flex-col flex-1">
+        {/* Image Container */}
+        <div className="w-full h-56 bg-gray-50 flex items-center justify-center p-4 overflow-hidden relative">
+          <img
+            src={`${getImgUrl(book?.coverImage)}`}
+            alt={book.title}
+            className="h-full w-auto object-contain drop-shadow-md group-hover:scale-105 transition-transform duration-300"
+          />
         </div>
 
-        <div>
-          <Link to={bookId ? `/books/${bookId}` : "#"}>
-            <h3 className="text-xl font-semibold hover:text-blue-600 mb-3">
+        {/* Content Container */}
+        <div className="p-4 flex flex-col flex-1 justify-between">
+          <div>
+            <h3 className="font-primary font-semibold text-gray-800 text-[15px] leading-tight line-clamp-2 hover:text-blue-600 transition">
               {book?.title}
             </h3>
-          </Link>
-          <p className="text-gray-600 mb-5">
-            {book?.description.length > 80
-              ? `${book.description.slice(0, 80)}...`
-              : book?.description}
-          </p>
-          <p className="font-medium mb-5">
-            ₹{book?.newPrice}{" "}
-            <span className="line-through font-normal ml-2">
-              ₹{book?.oldPrice}
-            </span>
-          </p>
-          <button
-            onClick={() => handleAddToCart(book)}
-            className="btn-primary px-6 space-x-1 flex items-center gap-1 "
-          >
-            <FiShoppingCart className="" />
-            <span>Add to Cart</span>
-          </button>
+            {/* Dummy author since schema doesn't have it, but requested by user's screenshot layout */}
+            <p className="text-gray-400 text-xs mt-1 mb-3 font-medium">By Unknown Author</p>
+          </div>
+
+          <div className="mt-auto">
+            {/* Price Row */}
+            <div className="flex items-center gap-2 mb-3 flex-wrap">
+               <span className="font-bold text-gray-900 text-lg">₹{book?.newPrice}</span>
+               <span className="text-gray-400 text-sm strike-through">₹{book?.oldPrice}</span>
+               {discount > 0 && (
+                   <span className="bg-green-100 text-green-700 text-xs font-bold px-2 py-0.5 rounded ml-auto">
+                     {discount}% Off
+                   </span>
+               )}
+            </div>
+          </div>
         </div>
+      </Link>
+
+      {/* Full width action button */}
+      <div className="px-4 pb-4">
+        <button
+          onClick={() => handleAddToCart(book)}
+          className="w-full bg-primary hover:bg-yellow-500 text-black font-semibold py-2 rounded flex justify-center items-center gap-2 transition"
+        >
+          <FiShoppingCart />
+          Add to Bag
+        </button>
       </div>
     </div>
   );

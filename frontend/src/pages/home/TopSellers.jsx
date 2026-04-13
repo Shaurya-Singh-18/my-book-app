@@ -24,45 +24,42 @@ const TopSellers = () => {
     const filteredBooks = selectedCategory === "Choose a genre" ? books : books.filter(book => book.category === selectedCategory.toLowerCase())
 
     return (
-        <div className='py-10'>
-            <h2 className='text-3xl font-semibold mb-6'>Top Sellers</h2>
-            {/* category filtering */}
-            <div className='mb-8 flex items-center'>
-                <select
-                    onChange={(e) => setSelectedCategory(e.target.value)}
-                    name="category" id="category" className='border bg-[#EAEAEA] border-gray-300 rounded-md px-4 py-2 focus:outline-none'>
-                    {
-                        categories.map((category, index) => (
-                            <option key={index} value={category}>{category}</option>
-                        ))
-                    }
-                </select>
+            <div className='flex justify-between items-end mb-8 relative'>
+                <div>
+                  <h2 className='text-3xl font-secondary font-bold text-gray-900'>Best Sellers</h2>
+                  <p className="text-gray-500 text-sm mt-1">Read What Millions Have Loved!</p>
+                </div>
+                
+                {/* Desktop View All */}
+                <button className='hidden md:flex items-center gap-2 border border-gray-300 rounded px-4 py-1 text-sm font-medium hover:bg-gray-50 transition'>
+                    Show All <span className='text-lg'>↗</span>
+                </button>
             </div>
 
             <Swiper
-                slidesPerView={1}
-                spaceBetween={30}
+                slidesPerView={2}
+                spaceBetween={15}
                 navigation={true}
                 breakpoints={{
                     640: {
-                        slidesPerView: 1,
+                        slidesPerView: 3,
                         spaceBetween: 20,
                     },
                     768: {
-                        slidesPerView: 2,
-                        spaceBetween: 40,
+                        slidesPerView: 4,
+                        spaceBetween: 25,
                     },
                     1024: {
-                        slidesPerView: 2,
-                        spaceBetween: 50,
+                        slidesPerView: 5,
+                        spaceBetween: 30,
                     },
-                    1180: {
-                        slidesPerView: 3,
-                        spaceBetween: 50,
+                    1280: {
+                        slidesPerView: 6,
+                        spaceBetween: 30,
                     }
                 }}
                 modules={[Pagination, Navigation]}
-                className="mySwiper"
+                className="mySwiper mb-12"
             >
 
                 {
